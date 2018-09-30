@@ -1,5 +1,7 @@
 # Barcampdockersolutin
 
+## Alles ungetestet...
+
 1. Docker-Machine installieren und Verbindung zum Server herstellen: https://docs.docker.com/machine/
 2. DNS-Records von Domain auf Server linken (A & AAAA Records)
 3. In der Datei traefik.toml ADDYOUREMAILHERE durch die eigene ersetzen
@@ -22,7 +24,7 @@ docker-compose -f docker-compose.traefik.yaml up -d
 KK_DOMAINS='YOURDOMAIN' docker-compose -f docker-compose.portainer.yaml up -d
 ```
 
-8. Wenn einer Meckert muss evtl. das Netzwerk von Hand auf dem Host(SSH) gesetzt werden
+8. Wenn einer meckert muss evtl. das Netzwerk von Hand auf dem Host(SSH) gesetzt werden
 
 ```
 docker network create reverseproxy
