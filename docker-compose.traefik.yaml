@@ -1,0 +1,32 @@
+version: '2.4'
+# 1. Setup a docker-machine: https://docs.docker.com/machine/
+# 2. In Terminal run:
+# eval "$(docker-machine env YOURTARGETMACHINENAME)"
+# docker-compose -f docker-compose.traefik.yaml up -d
+# 3. If 2 does not work run on host: docker network create reverseproxy and repeat 2.
+services:
+  reverseproxy:
+    build:
+      context: ./
+      dockerfile: Dockerfile.traefik
+      args:
+        VERSION: ${TRAEFIK_VERSION:-alpine}
+    ports:
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
+    expose:
+      - "8080"
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - reverseproxy:/mytraefik
+    networks:
+      reverseproxy:
+
+volumes:
+  reverseproxy:
+
+networks:
+  reverseproxy:
+    external: true
+    name: reverseproxy # named networks will not get removed on container update/removal

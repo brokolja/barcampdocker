@@ -1,0 +1,30 @@
+logLevel = "WARN"
+defaultEntryPoints = ["https","http"]
+
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+  [entryPoints.http.redirect]
+    entryPoint = "https"
+  [entryPoints.https]
+    address = ":443"
+    [entryPoints.https.tls]
+
+[ping]
+  entryPoint = "traefik"
+
+[docker]
+  endpoint = "unix:///var/run/docker.sock"
+  domain = "docker.local"
+  watch = true
+  exposedbydefault = false
+
+[acme]
+  email = "ADDYOUREMAILHERE"
+  storage = "acme.json"
+  entryPoint = "https"
+  OnHostRule = true
+  acmeLogging = true
+
+[acme.httpChallenge]
+  entryPoint = "http"

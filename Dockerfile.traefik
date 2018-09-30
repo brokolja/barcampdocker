@@ -1,0 +1,9 @@
+ARG VERSION=alpine
+FROM traefik:$VERSION
+RUN mkdir -p /mytraefik/
+ADD traefik.toml /mytraefik/traefik.toml
+ADD acme.json /mytraefik/acme.json
+RUN chmod 600 /mytraefik/acme.json
+RUN ln -s /mytraefik/traefik.toml /traefik.toml
+RUN ln -s /mytraefik/acme.json /acme.json
+RUN chmod 600 /acme.json

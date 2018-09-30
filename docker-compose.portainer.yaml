@@ -1,0 +1,34 @@
+version: '2.4'
+# 1. Setup a docker-machine: https://docs.docker.com/machine/
+# 2. Create DNS records for domain and point it to your server
+# 3. In Terminal run:
+# eval "$(docker-machine env YOURTARGETMACHINENAME)"
+# KK_DOMAINS='YOURDOMAIN' docker-compose -f docker-compose.portainer.yaml up -d
+services:
+  portainer:
+    image: portainer/portainer:latest
+    restart: always
+    command: --host=unix:///var/run/docker.sock -p :80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - data:/data:rw
+    expose:
+      - "80"
+    networks:
+      reverseproxy:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=my_portainer"
+      - "traefik.backend.loadbalancer.stickiness=true"
+      - "traefik.docker.network=reverseproxy"
+      - "traefik.my_portainer.frontend.passHostHeader=true"
+      - "traefik.my_portainer.port=80"
+      - "traefik.my_portainer.frontend.rule=Host:${KK_DOMAINS:?err}"
+
+volumes:
+  data:
+
+networks:
+  reverseproxy:
+    external: true
+    name: reverseproxy
